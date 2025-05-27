@@ -4,8 +4,17 @@ import { PrismaModule } from './core/prisma/prisma.module'; // ajuste o caminho 
 import { TenantModule } from './modules/tenant/tenant.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/users/user.module';
+import { CategoriesModule } from './modules/categories/categories.module';
+import { ProductsModule } from './modules/products/products.module';
 
 @Module({
-  imports: [PrismaModule, TenantModule, AuthModule, UserModule],
+  imports: [
+    PrismaModule,
+    TenantModule,
+    AuthModule,
+    UserModule,
+    CategoriesModule,
+    ProductsModule,
+  ],
 })
 export class AppModule {}
