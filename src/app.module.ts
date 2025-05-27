@@ -1,10 +1,12 @@
+// src/app.module.ts
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { PrismaModule } from './core/prisma/prisma.module'; // ajuste o caminho conforme necessário
+import { TenantModule } from './modules/tenant/tenant.module';
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [
+    PrismaModule, // só se não for @Global()
+    TenantModule,
+  ],
 })
 export class AppModule {}
