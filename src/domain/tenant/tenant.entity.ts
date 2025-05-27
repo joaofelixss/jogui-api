@@ -5,7 +5,6 @@ export class Tenant {
     public name: string,
     public slug: string | null,
     public planId: string,
-    public plan?: any,
     public createdAt?: Date,
     public updatedAt?: Date,
   ) {}

@@ -24,4 +24,21 @@ export class PrismaPlanRepository implements PlanRepository {
 
     return plans.map(PrismaPlanMapper.toDomain);
   }
+
+  async create(plan: Plan): Promise<Plan> {
+    const raw = PrismaPlanMapper.toPrisma(plan); // converte Plan entidade para formato Prisma
+
+    const createdPlan = await this.prisma.plan.create({
+      data: {
+        id: raw.id,
+        name: raw.name,
+        tenants: {
+          connect: raw.tenants?.map((tenant: any) => ({ id: tenant.id })) || [],
+        },
+      },
+      include: { tenants: true },
+    });
+
+    return PrismaPlanMapper.toDomain(createdPlan);
+  }
 }

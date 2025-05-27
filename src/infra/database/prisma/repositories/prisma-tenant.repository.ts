@@ -12,6 +12,7 @@ export class PrismaTenantRepository {
       data: {
         id: tenant.id,
         name: tenant.name,
+        slug: tenant.slug,
         createdAt: tenant.createdAt,
         plan: {
           connect: { id: tenant.planId },

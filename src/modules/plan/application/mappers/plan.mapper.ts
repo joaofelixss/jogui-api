@@ -19,4 +19,14 @@ export class PrismaPlanMapper {
       ),
     );
   }
+  static toPrisma(plan: Plan) {
+    return {
+      id: plan.id,
+      name: plan.name,
+      tenants: plan.tenants?.map((tenant) => ({
+        id: tenant.id,
+        // adicione outras propriedades que forem necessárias
+      })),
+    };
+  }
 }

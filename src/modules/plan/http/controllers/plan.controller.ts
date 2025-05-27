@@ -1,14 +1,17 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Post, Body } from '@nestjs/common';
 import { ListPlansUseCase } from '../../use-cases/list-plans.use-case';
+import { CreatePlanUseCase } from '../../use-cases/create-plan.use-case';
 
 @Controller('plans')
 export class PlanController {
-  constructor(private readonly listPlans: ListPlansUseCase) {}
+  constructor(
+    private readonly listPlans: ListPlansUseCase,
+    private readonly createPlan: CreatePlanUseCase,
+  ) {}
 
   @Get()
   async findAll() {
     const plans = await this.listPlans.execute();
-
     return plans.map((plan) => ({
       id: plan.id,
       name: plan.name,
@@ -18,5 +21,14 @@ export class PlanController {
         slug: t.slug,
       })),
     }));
+  }
+
+  @Post()
+  async create(@Body() body: { name: string }) {
+    const plan = await this.createPlan.execute(body.name);
+    return {
+      id: plan.id,
+      name: plan.name,
+    };
   }
 }
