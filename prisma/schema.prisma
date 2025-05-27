@@ -17,12 +17,14 @@ enum Role {
 model Tenant {
   id        String   @id @default(uuid())
   name      String
+  slug      String?   @unique  // ← ADICIONE ISSO
   createdAt DateTime @default(now())
 
   users     User[]
   products  Product[]
   categories Category[]
 }
+
 
 model User {
   id        String   @id @default(uuid())
