@@ -19,12 +19,19 @@ model Tenant {
   name      String
   slug      String?   @unique  // ← ADICIONE ISSO
   createdAt DateTime @default(now())
+  planId    String
+  plan      Plan     @relation(fields: [planId], references: [id])
 
   users     User[]
   products  Product[]
   categories Category[]
 }
 
+model Plan {
+  id       String   @id @default(uuid())
+  name     String
+  tenants  Tenant[] // ← relacionamento correto
+}
 
 model User {
   id        String   @id @default(uuid())

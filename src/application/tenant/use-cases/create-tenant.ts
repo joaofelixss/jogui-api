@@ -19,6 +19,7 @@ export class CreateTenant {
       crypto.randomUUID(),
       name,
       slug,
+      'default',
       new Date(),
       new Date(),
     );

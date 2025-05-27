@@ -13,6 +13,9 @@ export class PrismaTenantRepository {
         id: tenant.id,
         name: tenant.name,
         createdAt: tenant.createdAt,
+        plan: {
+          connect: { id: tenant.planId },
+        },
       },
     });
   }
