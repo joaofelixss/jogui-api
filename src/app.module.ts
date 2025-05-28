@@ -14,6 +14,7 @@ import { AddressesModule } from './modules/addresses/addresses.module';
 import { UserPermissionsModule } from './modules/user-permissions/user-permissions.module';
 import { StockMovementsModule } from './modules/stock-movements/stock-movements.module';
 import { FinancialModule } from './modules/financial/financial.module';
+import { ActivityLogModule } from './modules/activity-log/activity-log.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { FinancialModule } from './modules/financial/financial.module';
     UserPermissionsModule,
     StockMovementsModule,
     FinancialModule,
+    ActivityLogModule,
     PlanModule,
   ],
 })

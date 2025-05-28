@@ -65,6 +65,8 @@ model User {
   StockMovement StockMovement[]
 
   FinancialHistory FinancialHistory[]
+
+  ActivityLog ActivityLog[]
 }
 
 
@@ -256,4 +258,12 @@ model FinancialHistory {
   changedById  String
   changedBy    User     @relation(fields: [changedById], references: [id])
   timestamp    DateTime @default(now())
+}
+
+model ActivityLog {
+  id        String   @id @default(uuid())
+  userId    String
+  action    String
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
 }
