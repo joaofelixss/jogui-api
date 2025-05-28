@@ -6,6 +6,7 @@ import { Tenant } from 'src/domain/tenant/tenant.entity';
 interface CreateTenantInput {
   name: string;
   slug: string;
+  planId: string;
 }
 
 @Injectable()
@@ -13,13 +14,13 @@ export class CreateTenant {
   constructor(private readonly tenantRepository: PrismaTenantRepository) {}
 
   async execute(input: CreateTenantInput): Promise<Tenant> {
-    const { name, slug } = input;
+    const { name, slug, planId } = input;
 
     const tenant = new Tenant(
       crypto.randomUUID(),
       name,
       slug,
-      'default',
+      planId,
       new Date(),
       new Date(),
     );

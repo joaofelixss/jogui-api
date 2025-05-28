@@ -12,6 +12,7 @@ export class TenantController {
     const tenant = await this.createTenant.execute({
       name: body.name,
       slug: body.slug,
+      planId: body.planId,
     });
 
     return {
