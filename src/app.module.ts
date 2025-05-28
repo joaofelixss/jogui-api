@@ -9,6 +9,7 @@ import { ProductsModule } from './modules/products/products.module';
 import { PlanModule } from './modules/plan/plan.module';
 import { AttributeModule } from './modules/atrributes/attributes.module';
 import { EmployeesModule } from './modules/employees/employees.module';
+import { OrdersModule } from './modules/orders/orders.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { EmployeesModule } from './modules/employees/employees.module';
     ProductsModule,
     AttributeModule,
     EmployeesModule,
+    OrdersModule,
     PlanModule,
   ],
 })

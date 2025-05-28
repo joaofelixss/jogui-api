@@ -43,23 +43,24 @@ model Plan {
 
 model User {
   id           String   @id @default(uuid())
-  email        String   @unique
   name         String
+  email        String   @unique
   password     String
   role         Role
   tenantId     String
   tenant       Tenant   @relation(fields: [tenantId], references: [id])
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt @default(now())
+  
+  products     Product[]
+  categories   Category[]
+  orders       Order[]        @relation("UserOrders")
+  addresses    Address[]
+  permissions  UserPermission[]
 
-  createdById  String?
-  createdBy    User?     @relation("CreatedUsers", fields: [createdById], references: [id])
-  createdUsers User[]    @relation("CreatedUsers")
-
-  updatedById  String?
-  updatedBy    User?     @relation("UpdatedUsers", fields: [updatedById], references: [id])
-  updatedUsers User[]    @relation("UpdatedUsers")
+  isDeleted    Boolean        @default(false)
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
 }
+
 
 model Employee {
   id        String   @id @default(uuid())
@@ -83,6 +84,8 @@ model Category {
   products   Product[]
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+
+   User User[]
 }
 
 model Product {
@@ -99,6 +102,8 @@ model Product {
   updatedAt   DateTime         @updatedAt
 
   variants    ProductVariant[]
+  User User[]
+  OrderItem OrderItem[]
 }
 
 model ProductVariant {
@@ -148,4 +153,60 @@ model ProductVariantAttribute {
   attributeValue    AttributeValue   @relation(name: "AttributeValueRelation", fields: [attributeValueId], references: [id])
 
   @@unique([productVariantId, attributeId])
+}
+
+model Order {
+  id         String       @id @default(uuid())
+  clientId   String
+  client     User         @relation("UserOrders", fields: [clientId], references: [id])
+  status     OrderStatus
+  total      Float
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  items      OrderItem[]
+  isDeleted  Boolean      @default(false)
+}
+
+model OrderItem {
+  id         String   @id @default(uuid())
+  orderId    String
+  productId  String
+  quantity   Int
+  price      Float
+  order      Order   @relation(fields: [orderId], references: [id])
+  product    Product @relation(fields: [productId], references: [id])
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  SHIPPED
+  DELIVERED
+  CANCELED
+}
+
+model Address {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  zip        String
+  city       String
+  state      String
+  street     String
+  number     String
+  complement String?
+}
+
+model UserPermission {
+  id           String     @id @default(uuid())
+  userId       String
+  permissionId String
+  user         User       @relation(fields: [userId], references: [id])
+  permission   Permission @relation(fields: [permissionId], references: [id])
+}
+
+model Permission {
+  id    String   @id @default(uuid())
+  name  String   @unique
+  users UserPermission[]
 }
