@@ -17,6 +17,7 @@ import { FinancialModule } from './modules/financial/financial.module';
 import { ActivityLogModule } from './modules/activity-log/activity-log.module';
 import { TasksModule } from './modules/tasks/tasks.module';
 import { TasxRuleModule } from './modules/tax-rule/tax-rule.module';
+import { AutoNotificationModule } from './modules/auto-notification/auto-notification.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { TasxRuleModule } from './modules/tax-rule/tax-rule.module';
     ActivityLogModule,
     TasksModule,
     TasxRuleModule,
+    AutoNotificationModule,
     PlanModule,
   ],
 })

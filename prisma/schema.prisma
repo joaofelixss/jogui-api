@@ -29,12 +29,10 @@ model Tenant {
   categories Category[]
   attributes Attribute[]
   productVariants ProductVariant[]
-
   FinancialRecord FinancialRecord[]
-
   Task Task[]
-
   TaxRule TaxRule[]
+  AutoNotification AutoNotification[]
 }
 
 model Plan {
@@ -307,6 +305,18 @@ model TaxRule {
   condition  String?   // JSON com regras específicas
   tenantId   String
   tenant     Tenant   @relation(fields: [tenantId], references: [id])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model AutoNotification {
+  id         String   @id @default(uuid())
+  type       String   // "EMAIL", "WHATSAPP"
+  event      String   // e.g., "ORDER_CREATED", "LOW_STOCK", "BILL_DUE"
+  message    String
+  active     Boolean  @default(true)
+  tenantId   String
+  tenant     Tenant  @relation(fields: [tenantId], references: [id])
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 }
