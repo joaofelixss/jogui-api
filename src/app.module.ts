@@ -7,6 +7,7 @@ import { UserModule } from './modules/users/user.module';
 import { CategoriesModule } from './modules/categories/categories.module';
 import { ProductsModule } from './modules/products/products.module';
 import { PlanModule } from './modules/plan/plan.module';
+import { AttributeModule } from './modules/atrributes/attributes.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { PlanModule } from './modules/plan/plan.module';
     UserModule,
     CategoriesModule,
     ProductsModule,
+    AttributeModule,
     PlanModule,
   ],
 })

@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { ProductRepository } from '../../infra/prisma/product.repository';
-import { UpdateProductDto } from '../../http/dtos/create-product.dto';
+import { UpdateProductDto } from '../../http/dtos/update-product.dto';
 
 @Injectable()
 export class UpdateProductUseCase {
