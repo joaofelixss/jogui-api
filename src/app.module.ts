@@ -16,6 +16,7 @@ import { StockMovementsModule } from './modules/stock-movements/stock-movements.
 import { FinancialModule } from './modules/financial/financial.module';
 import { ActivityLogModule } from './modules/activity-log/activity-log.module';
 import { TasksModule } from './modules/tasks/tasks.module';
+import { TasxRuleModule } from './modules/tax-rule/tax-rule.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { TasksModule } from './modules/tasks/tasks.module';
     FinancialModule,
     ActivityLogModule,
     TasksModule,
+    TasxRuleModule,
     PlanModule,
   ],
 })
