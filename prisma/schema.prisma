@@ -29,6 +29,8 @@ model Tenant {
   categories Category[]
   attributes Attribute[]
   productVariants ProductVariant[]
+
+  FinancialRecord FinancialRecord[]
 }
 
 model Plan {
@@ -61,6 +63,8 @@ model User {
   updatedAt    DateTime       @updatedAt
 
   StockMovement StockMovement[]
+
+  FinancialHistory FinancialHistory[]
 }
 
 
@@ -226,4 +230,30 @@ model StockMovement {
   createdBy    User     @relation(fields: [createdById], references: [id])
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+}
+
+enum FinancialType {
+  INCOME
+  EXPENSE
+}
+
+model FinancialRecord {
+  id         String         @id @default(uuid())
+  type       FinancialType
+  value      Float
+  dueDate    DateTime
+  paid       Boolean        @default(false)
+  tenantId   String
+  tenant     Tenant         @relation(fields: [tenantId], references: [id])
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+}
+
+model FinancialHistory {
+  id           String   @id @default(uuid())
+  recordId     String
+  action       String   // "CREATED", "UPDATED", "PAID"
+  changedById  String
+  changedBy    User     @relation(fields: [changedById], references: [id])
+  timestamp    DateTime @default(now())
 }

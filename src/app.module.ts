@@ -13,6 +13,7 @@ import { OrdersModule } from './modules/orders/orders.module';
 import { AddressesModule } from './modules/addresses/addresses.module';
 import { UserPermissionsModule } from './modules/user-permissions/user-permissions.module';
 import { StockMovementsModule } from './modules/stock-movements/stock-movements.module';
+import { FinancialModule } from './modules/financial/financial.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { StockMovementsModule } from './modules/stock-movements/stock-movements.
     AddressesModule,
     UserPermissionsModule,
     StockMovementsModule,
+    FinancialModule,
     PlanModule,
   ],
 })
