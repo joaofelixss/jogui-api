@@ -11,6 +11,7 @@ import { AttributeModule } from './modules/atrributes/attributes.module';
 import { EmployeesModule } from './modules/employees/employees.module';
 import { OrdersModule } from './modules/orders/orders.module';
 import { AddressesModule } from './modules/addresses/addresses.module';
+import { UserPermissionsModule } from './modules/user-permissions/user-permissions.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { AddressesModule } from './modules/addresses/addresses.module';
     EmployeesModule,
     OrdersModule,
     AddressesModule,
+    UserPermissionsModule,
     PlanModule,
   ],
 })
