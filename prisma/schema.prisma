@@ -31,6 +31,8 @@ model Tenant {
   productVariants ProductVariant[]
 
   FinancialRecord FinancialRecord[]
+
+  Task Task[]
 }
 
 model Plan {
@@ -67,6 +69,10 @@ model User {
   FinancialHistory FinancialHistory[]
 
   ActivityLog ActivityLog[]
+
+  assignedTasks Task[] @relation("AssignedTasks")
+
+  createdTasks Task[] @relation("CreatedTasks")
 }
 
 
@@ -266,4 +272,26 @@ model ActivityLog {
   action    String
   createdAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id])
+}
+
+model Task {
+  id              String       @id @default(uuid())
+  title           String
+  description     String?
+  assignedToId    String
+  assignedTo      User         @relation("AssignedTasks", fields: [assignedToId], references: [id])
+  createdById     String
+  createdBy       User         @relation("CreatedTasks", fields: [createdById], references: [id])
+  status          TaskStatus   @default(PENDING)
+  tenantId        String
+  tenant          Tenant       @relation(fields: [tenantId], references: [id])
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+}
+
+enum TaskStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  CANCELED
 }

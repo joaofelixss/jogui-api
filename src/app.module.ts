@@ -15,6 +15,7 @@ import { UserPermissionsModule } from './modules/user-permissions/user-permissio
 import { StockMovementsModule } from './modules/stock-movements/stock-movements.module';
 import { FinancialModule } from './modules/financial/financial.module';
 import { ActivityLogModule } from './modules/activity-log/activity-log.module';
+import { TasksModule } from './modules/tasks/tasks.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { ActivityLogModule } from './modules/activity-log/activity-log.module';
     StockMovementsModule,
     FinancialModule,
     ActivityLogModule,
+    TasksModule,
     PlanModule,
   ],
 })
