@@ -18,6 +18,7 @@ import { ActivityLogModule } from './modules/activity-log/activity-log.module';
 import { TasksModule } from './modules/tasks/tasks.module';
 import { TasxRuleModule } from './modules/tax-rule/tax-rule.module';
 import { AutoNotificationModule } from './modules/auto-notification/auto-notification.module';
+import { CrmCampaignModule } from './modules/crm-campaign/crm-campaign.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { AutoNotificationModule } from './modules/auto-notification/auto-notific
     TasksModule,
     TasxRuleModule,
     AutoNotificationModule,
+    CrmCampaignModule,
     PlanModule,
   ],
 })
