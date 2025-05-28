@@ -15,53 +15,124 @@ enum Role {
 }
 
 model Tenant {
-  id        String   @id @default(uuid())
-  name      String
-  slug      String?   @unique  // ← ADICIONE ISSO
-  createdAt DateTime @default(now())
-  planId    String
-  plan      Plan     @relation(fields: [planId], references: [id])
+  id         String    @id @default(uuid())
+  name       String
+  slug       String    @unique
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  planId     String
+  plan       Plan      @relation(fields: [planId], references: [id])
 
-  users     User[]
-  products  Product[]
+  users      User[]
+  products   Product[]
   categories Category[]
+  attributes Attribute[]
+  productVariants ProductVariant[]
 }
 
 model Plan {
-  id       String   @id @default(uuid())
-  name     String
-  tenants  Tenant[] // ← relacionamento correto
+  id             String   @id @default(uuid())
+  name           String
+  description    String?
+  price          Decimal? @db.Decimal(10, 2)
+  limitUsers     Int?
+  limitProducts  Int?
+  tenants        Tenant[]
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  name      String
-  password  String
-  role      Role
-  tenantId  String
-  tenant    Tenant   @relation(fields: [tenantId], references: [id])
-  createdAt DateTime @default(now())
+  id           String   @id @default(uuid())
+  email        String   @unique
+  name         String
+  password     String
+  role         Role
+  tenantId     String
+  tenant       Tenant   @relation(fields: [tenantId], references: [id])
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt @default(now())
+
+  createdById  String?
+  createdBy    User?     @relation("CreatedUsers", fields: [createdById], references: [id])
+  createdUsers User[]    @relation("CreatedUsers")
+
+  updatedById  String?
+  updatedBy    User?     @relation("UpdatedUsers", fields: [updatedById], references: [id])
+  updatedUsers User[]    @relation("UpdatedUsers")
 }
 
 model Category {
+  id         String   @id @default(uuid())
+  name       String
+  tenantId   String
+  tenant     Tenant   @relation(fields: [tenantId], references: [id])
+  products   Product[]
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model Product {
+  id          String           @id @default(uuid())
+  name        String
+  description String?
+  price       Decimal          @db.Decimal(10, 2)
+  image       String?
+  tenantId    String
+  categoryId  String
+  tenant      Tenant           @relation(fields: [tenantId], references: [id])
+  category    Category         @relation(fields: [categoryId], references: [id])
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  variants    ProductVariant[]
+}
+
+model ProductVariant {
+  id         String   @id @default(uuid())
+  name       String
+  sku        String   @unique
+  price      Decimal  @db.Decimal(10, 2)
+  stock      Int
+  image      String?
+  productId  String
+  product    Product  @relation(fields: [productId], references: [id])
+  tenantId   String
+  tenant     Tenant   @relation(fields: [tenantId], references: [id])
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  attributes ProductVariantAttribute[]
+}
+
+model Attribute {
   id        String   @id @default(uuid())
   name      String
   tenantId  String
   tenant    Tenant   @relation(fields: [tenantId], references: [id])
-  products  Product[]
-  createdAt DateTime @default(now())
+  values    AttributeValue[]
+
+  ProductVariantAttribute ProductVariantAttribute[] @relation(name: "AttributeRelation")
 }
 
-model Product {
+model AttributeValue {
   id          String   @id @default(uuid())
-  name        String
-  description String?
-  price       Decimal   @db.Decimal(10, 2)
-  image       String?
-  tenantId    String
-  categoryId  String
-  tenant      Tenant    @relation(fields: [tenantId], references: [id])
-  category    Category  @relation(fields: [categoryId], references: [id])
-  createdAt   DateTime  @default(now())
+  value       String
+  attributeId String
+  attribute   Attribute @relation(fields: [attributeId], references: [id])
+
+  ProductVariantAttribute ProductVariantAttribute[] @relation(name: "AttributeValueRelation")
 }
+
+model ProductVariantAttribute {
+  id                String           @id @default(uuid())
+  productVariantId  String
+  attributeId       String
+  attributeValueId  String
+
+  productVariant    ProductVariant   @relation(fields: [productVariantId], references: [id])
+  attribute         Attribute        @relation(name: "AttributeRelation", fields: [attributeId], references: [id])
+  attributeValue    AttributeValue   @relation(name: "AttributeValueRelation", fields: [attributeValueId], references: [id])
+
+  @@unique([productVariantId, attributeId])
+}
+
+
