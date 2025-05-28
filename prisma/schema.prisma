@@ -59,6 +59,8 @@ model User {
   isDeleted    Boolean        @default(false)
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
+
+  StockMovement StockMovement[]
 }
 
 
@@ -104,6 +106,8 @@ model Product {
   variants    ProductVariant[]
   User User[]
   OrderItem OrderItem[]
+
+  StockMovement StockMovement[]
 }
 
 model ProductVariant {
@@ -209,4 +213,17 @@ model Permission {
   id    String   @id @default(uuid())
   name  String   @unique
   users UserPermission[]
+}
+
+model StockMovement {
+  id           String   @id @default(uuid())
+  productId    String
+  product      Product  @relation(fields: [productId], references: [id])
+  type         String   // "IN", "OUT", "ADJUST"
+  quantity     Int
+  reason       String?
+  createdById  String
+  createdBy    User     @relation(fields: [createdById], references: [id])
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }

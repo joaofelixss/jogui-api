@@ -12,6 +12,7 @@ import { EmployeesModule } from './modules/employees/employees.module';
 import { OrdersModule } from './modules/orders/orders.module';
 import { AddressesModule } from './modules/addresses/addresses.module';
 import { UserPermissionsModule } from './modules/user-permissions/user-permissions.module';
+import { StockMovementsModule } from './modules/stock-movements/stock-movements.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { UserPermissionsModule } from './modules/user-permissions/user-permissio
     OrdersModule,
     AddressesModule,
     UserPermissionsModule,
+    StockMovementsModule,
     PlanModule,
   ],
 })
