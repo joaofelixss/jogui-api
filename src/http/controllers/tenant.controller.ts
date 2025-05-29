@@ -1,7 +1,7 @@
-// src/http/controllers/tenant/tenant.controller.ts
+// src/http/controllers/tenant.controller.ts
 import { Controller, Post, Body } from '@nestjs/common';
 import { CreateTenant } from 'src/application/tenant/use-cases/create-tenant';
-import { CreateTenantDto } from './dto/create-tenant.dto';
+import { CreateTenantDto } from '../dtos/create-tenant.dto';
 
 @Controller('tenants')
 export class TenantController {

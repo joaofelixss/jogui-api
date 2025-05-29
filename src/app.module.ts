@@ -1,7 +1,7 @@
 // src/app.module.ts
 import { Module } from '@nestjs/common';
 import { PrismaModule } from './core/prisma/prisma.module'; // ajuste o caminho conforme necessário
-import { TenantModule } from './modules/tenant/tenant.module';
+import { TenantModule } from './tenants/tenant.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { UserModule } from './modules/users/user.module';
 import { CategoriesModule } from './modules/categories/categories.module';

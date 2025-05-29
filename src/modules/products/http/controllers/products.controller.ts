@@ -1,3 +1,4 @@
+// src/modules/products/http/controllers/products.controller.ts
 import {
   Controller,
   Get,

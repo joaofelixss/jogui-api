@@ -1,7 +1,7 @@
 import { Role } from 'src/core/entities/user.entity';
 
 export type AuthUser = {
-  sub: string; // ID do usuário
+  userId: string;
   email: string;
   role: Role;
   tenantId: string;
