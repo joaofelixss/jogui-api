@@ -8,12 +8,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum Role {
-  ADMIN
-  FUNCIONARIO
-  CLIENTE
-}
-
 model Tenant {
   id         String    @id @default(uuid())
   name       String
@@ -35,6 +29,8 @@ model Tenant {
   AutoNotification AutoNotification[]
   CrmCampaign CrmCampaign[]
   InternalFeed InternalFeed[]
+
+  Role Role[]
 }
 
 model Plan {
@@ -52,7 +48,6 @@ model User {
   name         String
   email        String   @unique
   password     String
-  role         Role
   tenantId     String
   tenant       Tenant   @relation(fields: [tenantId], references: [id])
   
@@ -60,7 +55,6 @@ model User {
   categories   Category[]
   orders       Order[]        @relation("UserOrders")
   addresses    Address[]
-  permissions  UserPermission[]
 
   isDeleted    Boolean        @default(false)
   createdAt    DateTime       @default(now())
@@ -72,6 +66,8 @@ model User {
   assignedTasks Task[] @relation("AssignedTasks")
   createdTasks Task[] @relation("CreatedTasks")
   InternalFeed InternalFeed[]
+
+  UserRole UserRole[]
 }
 
 
@@ -212,20 +208,6 @@ model Address {
   complement String?
 }
 
-model UserPermission {
-  id           String     @id @default(uuid())
-  userId       String
-  permissionId String
-  user         User       @relation(fields: [userId], references: [id])
-  permission   Permission @relation(fields: [permissionId], references: [id])
-}
-
-model Permission {
-  id    String   @id @default(uuid())
-  name  String   @unique
-  users UserPermission[]
-}
-
 model Stock {
   id         String   @id @default(cuid())
   productId  String   @unique
@@ -349,4 +331,39 @@ model InternalFeed {
   tenant     Tenant   @relation(fields: [tenantId], references: [id])
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+}
+
+model Permission {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  roles     RolePermission[]
+}
+
+model Role {
+  id        String   @id @default(uuid())
+  name      String
+  tenantId  String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id])
+  users     UserRole[]
+  permissions RolePermission[]
+}
+
+model RolePermission {
+  id           String      @id @default(uuid())
+  roleId       String
+  permissionId String
+  role         Role        @relation(fields: [roleId], references: [id])
+  permission   Permission  @relation(fields: [permissionId], references: [id])
+
+  @@unique([roleId, permissionId])
+}
+
+model UserRole {
+  id      String @id @default(uuid())
+  userId  String
+  roleId  String
+  role    Role   @relation(fields: [roleId], references: [id])
+  user    User   @relation(fields: [userId], references: [id])
+
+  @@unique([userId, roleId])
 }

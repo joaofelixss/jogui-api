@@ -11,7 +11,6 @@ import { AttributeModule } from './modules/atrributes/attributes.module';
 import { EmployeesModule } from './modules/employees/employees.module';
 import { OrdersModule } from './modules/orders/orders.module';
 import { AddressesModule } from './modules/addresses/addresses.module';
-import { UserPermissionsModule } from './modules/user-permissions/user-permissions.module';
 import { StockMovementsModule } from './modules/stock-movements/stock-movements.module';
 import { FinancialModule } from './modules/financial/financial.module';
 import { ActivityLogModule } from './modules/activity-log/activity-log.module';
@@ -21,6 +20,7 @@ import { AutoNotificationModule } from './modules/auto-notification/auto-notific
 import { CrmCampaignModule } from './modules/crm-campaign/crm-campaign.module';
 import { InternalFeedModule } from './modules/internal-feed/internal-feed.module';
 import { StockModule } from './modules/stock/stock.module';
+import { RoleModule } from './modules/role/role.module';
 
 @Module({
   imports: [
@@ -34,7 +34,6 @@ import { StockModule } from './modules/stock/stock.module';
     EmployeesModule,
     OrdersModule,
     AddressesModule,
-    UserPermissionsModule,
     StockModule,
     StockMovementsModule,
     FinancialModule,
@@ -45,6 +44,7 @@ import { StockModule } from './modules/stock/stock.module';
     CrmCampaignModule,
     InternalFeedModule,
     PlanModule,
+    RoleModule,
   ],
 })
 export class AppModule {}
