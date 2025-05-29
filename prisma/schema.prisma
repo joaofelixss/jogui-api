@@ -118,6 +118,7 @@ model Product {
   User User[]
   OrderItem OrderItem[]
   StockMovement StockMovement[]
+  Stock Stock[]
 }
 
 model ProductVariant {
@@ -223,6 +224,15 @@ model Permission {
   id    String   @id @default(uuid())
   name  String   @unique
   users UserPermission[]
+}
+
+model Stock {
+  id         String   @id @default(cuid())
+  productId  String   @unique
+  quantity   Int
+  updatedAt  DateTime @updatedAt
+
+  product    Product  @relation(fields: [productId], references: [id])
 }
 
 model StockMovement {

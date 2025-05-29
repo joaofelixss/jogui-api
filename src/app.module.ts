@@ -20,6 +20,7 @@ import { TasxRuleModule } from './modules/tax-rule/tax-rule.module';
 import { AutoNotificationModule } from './modules/auto-notification/auto-notification.module';
 import { CrmCampaignModule } from './modules/crm-campaign/crm-campaign.module';
 import { InternalFeedModule } from './modules/internal-feed/internal-feed.module';
+import { StockModule } from './modules/stock/stock.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { InternalFeedModule } from './modules/internal-feed/internal-feed.module
     OrdersModule,
     AddressesModule,
     UserPermissionsModule,
+    StockModule,
     StockMovementsModule,
     FinancialModule,
     ActivityLogModule,
