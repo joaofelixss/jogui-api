@@ -14,8 +14,16 @@ import { UpdateCategoryDto } from '../dtos/update-category.dto';
 import { JwtAuthGuard } from 'src/modules/auth/infra/jwt-auth.guard';
 import { CurrentUser } from 'src/core/decorators/current-user.decorator';
 import { AuthUser } from 'src/modules/auth/types/auth-user';
+import { Plans } from 'src/core/decorators/plans.decorator';
+import { Roles } from 'src/core/decorators/roles.decorator';
+import { Role } from 'src/core/entities/user.entity';
+import { Plan } from 'src/core/entities/plan.entity';
+import { RolesGuard } from 'src/core/guards/roles.guard';
+import { PlansGuard } from 'src/core/guards/plans.guard';
 
-@UseGuards(JwtAuthGuard)
+@Roles(Role.ADMIN)
+@Plans(Plan.GESTAO_PRO, Plan.PONTO)
+@UseGuards(JwtAuthGuard, RolesGuard, PlansGuard)
 @Controller('categories')
 export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}

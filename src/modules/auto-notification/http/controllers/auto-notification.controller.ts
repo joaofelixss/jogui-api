@@ -6,11 +6,22 @@ import {
   Param,
   Put,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { AutoNotificationService } from '../../application/auto-notification.service';
 import { CreateAutoNotificationDto } from '../dtos/create-auto-notification.dto';
 import { UpdateAutoNotificationDto } from '../dtos/update-auto-notification.dto';
+import { Plans } from 'src/core/decorators/plans.decorator';
+import { Roles } from 'src/core/decorators/roles.decorator';
+import { Role } from 'src/core/entities/user.entity';
+import { Plan } from 'src/core/entities/plan.entity';
+import { RolesGuard } from 'src/core/guards/roles.guard';
+import { PlansGuard } from 'src/core/guards/plans.guard';
+import { JwtAuthGuard } from 'src/modules/auth/infra/jwt-auth.guard';
 
+@Roles(Role.ADMIN)
+@Plans(Plan.GESTAO_PRO, Plan.PONTO)
+@UseGuards(JwtAuthGuard, RolesGuard, PlansGuard)
 @Controller('auto-notifications')
 export class AutoNotificationController {
   constructor(private readonly service: AutoNotificationService) {}

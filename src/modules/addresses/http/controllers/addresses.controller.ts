@@ -29,7 +29,6 @@ import { PlansGuard } from 'src/core/guards/plans.guard';
 @Roles(Role.ADMIN)
 @Plans(Plan.GESTAO_PRO, Plan.PONTO)
 @UseGuards(JwtAuthGuard, RolesGuard, PlansGuard)
-@UseGuards(JwtAuthGuard)
 @Controller('addresses')
 export class AddressesController {
   constructor(

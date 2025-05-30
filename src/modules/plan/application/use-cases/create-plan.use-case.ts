@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { PlanRepository } from '../domain/interface/plan.repository';
-import { Plan } from '../domain/plan.entity';
+import { PlanRepository } from '../../domain/interface/plan.repository';
+import { Plan } from '../../domain/plan.entity';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()

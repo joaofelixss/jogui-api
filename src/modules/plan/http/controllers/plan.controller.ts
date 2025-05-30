@@ -1,7 +1,7 @@
 // src/modules/plan/http/controllers/plan.controller.ts
 import { Controller, Get, Post, Body, UseGuards } from '@nestjs/common';
-import { ListPlansUseCase } from '../../use-cases/list-plans.use-case';
-import { CreatePlanUseCase } from '../../use-cases/create-plan.use-case';
+import { ListPlansUseCase } from '../../application/use-cases/list-plans.use-case';
+import { CreatePlanUseCase } from '../../application/use-cases/create-plan.use-case';
 import { JwtAuthGuard } from 'src/modules/auth/infra/jwt-auth.guard';
 import { SuperAdminGuard } from 'src/core/guards/super-admin.guard';
 

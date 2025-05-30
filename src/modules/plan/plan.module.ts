@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { PlanController } from './http/controllers/plan.controller';
-import { ListPlansUseCase } from './use-cases/list-plans.use-case';
-import { CreatePlanUseCase } from './use-cases/create-plan.use-case';
+import { ListPlansUseCase } from './application/use-cases/list-plans.use-case';
+import { CreatePlanUseCase } from './application/use-cases/create-plan.use-case';
 import { PlanRepository } from './domain/interface/plan.repository';
 import { PrismaPlanRepository } from './infra/prisma/plan.repository';
 import { PrismaService } from 'src/core/prisma/prisma.service';
