@@ -5,8 +5,8 @@ import {
   Body,
   Param,
   Delete,
-  Put,
   UseGuards,
+  Patch,
 } from '@nestjs/common';
 import { CreateProductDto } from '../dtos/create-product.dto';
 import { UpdateProductDto } from '../dtos/update-product.dto';
@@ -39,7 +39,7 @@ export class AdminProductsController {
     return this.createProductUseCase.execute(user.tenantId, dto);
   }
 
-  @Put(':id')
+  @Patch(':id')
   update(
     @Param('id') id: string,
     @Body() dto: UpdateProductDto,

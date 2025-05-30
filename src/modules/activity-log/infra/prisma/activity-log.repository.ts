@@ -1,22 +1,17 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/core/prisma/prisma.service';
-import { CreateActivityLogDto } from '../http/dtos/create-activity-log.dto';
 
 @Injectable()
-export class ActivityLogService {
+export class ActivityLogRepository {
   constructor(private prisma: PrismaService) {}
 
-  create(dto: CreateActivityLogDto) {
-    return this.prisma.activityLog.create({
-      data: {
-        userId: dto.userId,
-        action: dto.action,
-      },
-    });
+  create(data: { userId: string; tenantId: string; action: string }) {
+    return this.prisma.activityLog.create({ data });
   }
 
-  findAll() {
+  findAll(userId: string) {
     return this.prisma.activityLog.findMany({
+      where: { userId },
       include: { user: true },
       orderBy: { createdAt: 'desc' },
     });
