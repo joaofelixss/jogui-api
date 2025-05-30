@@ -1,48 +1,160 @@
-import { Injectable } from '@nestjs/common';
+// src/modules/products/infra/prisma/product.repository.ts
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/core/prisma/prisma.service';
 import { Product } from '../../domain/product.entity';
 import { UpdateProductDto } from '../../http/dtos/update-product.dto';
 
 @Injectable()
 export class ProductRepository {
-  constructor(private prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) {}
 
-  async create(produto: Product) {
-    return this.prisma.product.create({
-      data: {
-        id: produto.id,
-        name: produto.name,
-        description: produto.description,
-        price: produto.price,
-        image: produto.image,
-        tenantId: produto.tenantId,
-        categoryId: produto.categoryId,
-        createdAt: produto.createdAt,
+  async create(product: Product) {
+    return this.prisma.$transaction(async (tx) => {
+      const createdProduct = await tx.product.create({
+        data: {
+          id: product.id,
+          name: product.name,
+          description: product.description,
+          price: product.price,
+          image: product.image,
+          tenantId: product.tenantId,
+          categoryId: product.categoryId,
+        },
+      });
+
+      for (const variant of product.variants) {
+        const createdVariant = await tx.productVariant.create({
+          data: {
+            id: variant.id,
+            name: variant.name,
+            price: variant.price,
+            stock: variant.stock,
+            sku: variant.sku,
+            tenantId: variant.tenantId,
+            productId: product.id,
+          },
+        });
+
+        for (const attr of variant.attributes) {
+          await tx.productVariantAttribute.create({
+            data: {
+              id: attr.id,
+              productVariantId: createdVariant.id,
+              attributeId: attr.attributeId,
+              attributeValueId: attr.attributeValueId,
+            },
+          });
+        }
+      }
+
+      return createdProduct;
+    });
+  }
+  async findAll(tenantId: string) {
+    const products = await this.prisma.product.findMany({
+      where: { tenantId },
+      include: {
+        category: true,
+        variants: {
+          include: {
+            attributes: {
+              include: {
+                attribute: true,
+                attributeValue: true,
+              },
+            },
+          },
+        },
       },
     });
-  }
 
-  async findAll(tenantId: string) {
-    return this.prisma.product.findMany({
-      where: { tenantId },
-      include: { category: true },
+    return products.map((product) => {
+      const variants = product.variants.map((variant) => ({
+        id: variant.id,
+        name: variant.name,
+        price: variant.price,
+        stock: variant.stock,
+        attributes: variant.attributes.map((attr) => ({
+          id: attr.id,
+          attributeId: attr.attributeId,
+          attributeName: attr.attribute.name,
+          attributeValueId: attr.attributeValueId,
+          attributeValue: attr.attributeValue.value,
+        })),
+      }));
+
+      return {
+        id: product.id,
+        name: product.name,
+        description: product.description,
+        price: product.price,
+        image: product.image,
+        category: product.category,
+        variants,
+      };
     });
   }
 
-  async findById(id: string, tenantId: string) {
-    return this.prisma.product.findFirst({
+  async findOne(tenantId: string, id: string) {
+    const product = await this.prisma.product.findFirst({
       where: { id, tenantId },
+      include: {
+        category: true,
+        variants: {
+          include: {
+            attributes: {
+              include: {
+                attribute: true,
+                attributeValue: true,
+              },
+            },
+          },
+        },
+      },
     });
+
+    if (!product) {
+      throw new NotFoundException('Produto não encontrado');
+    }
+
+    // Organiza os atributos em formato mais legível por variante
+    const variantsWithAttributes = product.variants.map((variant) => {
+      const attributes = variant.attributes.map((attr) => ({
+        id: attr.id,
+        attributeId: attr.attributeId,
+        attributeName: attr.attribute.name,
+        attributeValueId: attr.attributeValueId,
+        attributeValue: attr.attributeValue.value,
+      }));
+
+      return {
+        id: variant.id,
+        name: variant.name,
+        price: variant.price,
+        stock: variant.stock,
+        attributes,
+      };
+    });
+
+    return {
+      id: product.id,
+      name: product.name,
+      description: product.description,
+      price: product.price,
+      image: product.image,
+      category: product.category,
+      variants: variantsWithAttributes,
+    };
   }
 
-  async update(id: string, tenantId: string, dto: UpdateProductDto) {
+  async update(id: string, dto: UpdateProductDto) {
     return this.prisma.product.update({
       where: { id },
       data: dto,
     });
   }
 
-  async delete(id: string, tenantId: string) {
+  async remove(id: string) {
     return this.prisma.product.delete({
       where: { id },
     });

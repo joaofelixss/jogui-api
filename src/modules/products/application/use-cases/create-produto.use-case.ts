@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
+import { ProductMapper } from '../mappers/product.mapper';
 import { ProductRepository } from '../../infra/prisma/product.repository';
 import { CreateProductDto } from '../../http/dtos/create-product.dto';
-import { ProductMapper } from '../mappers/product.mapper';
 
 @Injectable()
 export class CreateProductUseCase {
-  constructor(private produtoRepository: ProductRepository) {}
+  constructor(private readonly productRepository: ProductRepository) {}
 
   async execute(tenantId: string, dto: CreateProductDto) {
-    const produto = ProductMapper.toDomainFromDto(dto, tenantId);
-    return this.produtoRepository.create(produto);
+    const product = ProductMapper.toDomainFromDto(dto, tenantId);
+    return this.productRepository.create(product);
   }
 }

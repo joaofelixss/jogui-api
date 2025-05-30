@@ -1,19 +1,18 @@
-// src/modules/products/application/use-cases/update-product.use-case.ts
+// src/modules/products/application/use-cases/delete-product.use-case.ts
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { UpdateProductDto } from '../../http/dtos/update-product.dto';
 import { ProductRepository } from '../../infra/prisma/product.repository';
 
 @Injectable()
-export class UpdateProductUseCase {
+export class DeleteProductUseCase {
   constructor(private readonly productRepository: ProductRepository) {}
 
-  async execute(tenantId: string, id: string, dto: UpdateProductDto) {
+  async execute(tenantId: string, id: string) {
     const existing = await this.productRepository.findOne(tenantId, id);
 
     if (!existing) {
       throw new NotFoundException('Produto não encontrado');
     }
 
-    return this.productRepository.update(id, dto);
+    return this.productRepository.remove(id);
   }
 }
