@@ -3,10 +3,8 @@ import {
   IsNotEmpty,
   IsString,
   MinLength,
-  IsEnum,
   IsUUID,
 } from 'class-validator';
-import { Role } from 'src/core/entities/user.entity';
 
 export class CreateUserDto {
   @IsString()
@@ -19,9 +17,6 @@ export class CreateUserDto {
   @IsString()
   @MinLength(6)
   password: string;
-
-  @IsEnum(Role)
-  role: Role;
 
   @IsUUID()
   tenantId: string;

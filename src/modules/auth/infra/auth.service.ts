@@ -14,7 +14,18 @@ export class AuthService {
   async login({ email, password }: LoginDto) {
     const user = await this.prisma.user.findUnique({
       where: { email },
-      include: { tenant: true },
+      include: {
+        tenant: {
+          include: {
+            plan: true,
+          },
+        },
+        UserRole: {
+          include: {
+            role: true,
+          },
+        },
+      },
     });
 
     if (!user) {
@@ -22,14 +33,21 @@ export class AuthService {
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
-
     if (!isPasswordValid) {
       throw new UnauthorizedException('Usuário ou senha inválidos.');
+    }
+
+    const userRole = user.UserRole[0]?.role?.name;
+
+    if (!userRole) {
+      throw new UnauthorizedException('Usuário sem papel definido.');
     }
 
     const payload = {
       sub: user.id,
       tenantId: user.tenantId,
+      role: userRole,
+      plan: user.tenant.plan.name,
     };
 
     const token = await this.jwtService.signAsync(payload);

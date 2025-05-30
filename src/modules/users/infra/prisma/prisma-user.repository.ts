@@ -6,7 +6,6 @@ interface CreateUserPrismaInput {
   name: string;
   email: string;
   password: string;
-  role: 'ADMIN' | 'FUNCIONARIO' | 'CLIENTE';
   tenantId: string;
 }
 

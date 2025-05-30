@@ -18,6 +18,7 @@ export class UserController {
       const user = await this.createUser.execute(dto);
       return { user };
     } catch (error) {
+      console.log(error);
       if (error.message.includes('Unique constraint failed')) {
         throw new HttpException(
           'E-mail já está em uso.',
