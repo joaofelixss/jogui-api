@@ -1,8 +1,12 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+// src/modules/plan/http/controllers/plan.controller.ts
+import { Controller, Get, Post, Body, UseGuards } from '@nestjs/common';
 import { ListPlansUseCase } from '../../use-cases/list-plans.use-case';
 import { CreatePlanUseCase } from '../../use-cases/create-plan.use-case';
+import { JwtAuthGuard } from 'src/modules/auth/infra/jwt-auth.guard';
+import { SuperAdminGuard } from 'src/core/guards/super-admin.guard';
 
-@Controller('plans')
+@UseGuards(JwtAuthGuard, SuperAdminGuard)
+@Controller('admin/plans')
 export class PlanController {
   constructor(
     private readonly listPlans: ListPlansUseCase,

@@ -31,11 +31,8 @@ export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Post()
-  create(
-    @Body() dto: CreateProductDto,
-    @Headers('x-tenant-id') tenantId: string,
-  ) {
-    return this.productsService.create(tenantId, dto);
+  create(@Body() dto: CreateProductDto, @CurrentUser() user: AuthUser) {
+    return this.productsService.create(user.tenantId, dto);
   }
 
   @Get()
