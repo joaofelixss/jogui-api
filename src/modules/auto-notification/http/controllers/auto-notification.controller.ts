@@ -8,7 +8,6 @@ import {
   Delete,
   UseGuards,
 } from '@nestjs/common';
-import { AutoNotificationService } from '../../application/auto-notification.service';
 import { CreateAutoNotificationDto } from '../dtos/create-auto-notification.dto';
 import { UpdateAutoNotificationDto } from '../dtos/update-auto-notification.dto';
 import { Plans } from 'src/core/decorators/plans.decorator';
@@ -18,36 +17,47 @@ import { Plan } from 'src/core/entities/plan.entity';
 import { RolesGuard } from 'src/core/guards/roles.guard';
 import { PlansGuard } from 'src/core/guards/plans.guard';
 import { JwtAuthGuard } from 'src/modules/auth/infra/jwt-auth.guard';
+import { CreateAutoNotificationUseCase } from '../../application/use-cases/create-auto-notification.use-case';
+import { FindAllAutoNotificationsUseCase } from '../../application/use-cases/find-all-auto-notifications.use-case';
+import { FindOneAutoNotificationUseCase } from '../../application/use-cases/find-one-auto-notification.use-case';
+import { UpdateAutoNotificationUseCase } from '../../application/use-cases/update-auto-notification.use-case';
+import { DeleteAutoNotificationUseCase } from '../../application/use-cases/delete-auto-notification.use-case';
 
+@Controller('auto-notifications')
 @Roles(Role.ADMIN)
 @Plans(Plan.GESTAO_PRO, Plan.PONTO)
 @UseGuards(JwtAuthGuard, RolesGuard, PlansGuard)
-@Controller('auto-notifications')
 export class AutoNotificationController {
-  constructor(private readonly service: AutoNotificationService) {}
+  constructor(
+    private readonly createUseCase: CreateAutoNotificationUseCase,
+    private readonly findAllUseCase: FindAllAutoNotificationsUseCase,
+    private readonly findOneUseCase: FindOneAutoNotificationUseCase,
+    private readonly updateUseCase: UpdateAutoNotificationUseCase,
+    private readonly deleteUseCase: DeleteAutoNotificationUseCase,
+  ) {}
 
   @Post()
   create(@Body() dto: CreateAutoNotificationDto) {
-    return this.service.create(dto);
+    return this.createUseCase.execute(dto);
   }
 
   @Get()
   findAll() {
-    return this.service.findAll();
+    return this.findAllUseCase.execute();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.service.findOne(id);
+    return this.findOneUseCase.execute(id);
   }
 
   @Put(':id')
   update(@Param('id') id: string, @Body() dto: UpdateAutoNotificationDto) {
-    return this.service.update(id, dto);
+    return this.updateUseCase.execute(id, dto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.service.remove(id);
+    return this.deleteUseCase.execute(id);
   }
 }

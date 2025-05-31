@@ -8,7 +8,6 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
-import { CategoriesService } from '../../categories.service';
 import { CreateCategoryDto } from '../dtos/create-category.dto';
 import { UpdateCategoryDto } from '../dtos/update-category.dto';
 import { JwtAuthGuard } from 'src/modules/auth/infra/jwt-auth.guard';
@@ -20,27 +19,38 @@ import { Role } from 'src/core/entities/user.entity';
 import { Plan } from 'src/core/entities/plan.entity';
 import { RolesGuard } from 'src/core/guards/roles.guard';
 import { PlansGuard } from 'src/core/guards/plans.guard';
+import { CreateCategoryUseCase } from '../../application/use-cases/create-category.usecase';
+import { GetAllCategoriesUseCase } from '../../application/use-cases/get-all-categories.usecase';
+import { GetCategoryUseCase } from '../../application/use-cases/get-category.usecase';
+import { UpdateCategoryUseCase } from '../../application/use-cases/update-category.usecase';
+import { DeleteCategoryUseCase } from '../../application/use-cases/delete-category.usecase';
 
 @Roles(Role.ADMIN)
 @Plans(Plan.GESTAO_PRO, Plan.PONTO)
 @UseGuards(JwtAuthGuard, RolesGuard, PlansGuard)
 @Controller('categories')
 export class CategoriesController {
-  constructor(private readonly categoriesService: CategoriesService) {}
+  constructor(
+    private createCategory: CreateCategoryUseCase,
+    private getAllCategories: GetAllCategoriesUseCase,
+    private getCategory: GetCategoryUseCase,
+    private updateCategory: UpdateCategoryUseCase,
+    private deleteCategory: DeleteCategoryUseCase,
+  ) {}
 
   @Post()
   create(@Body() dto: CreateCategoryDto, @CurrentUser() user: AuthUser) {
-    return this.categoriesService.create(user.tenantId, dto);
+    return this.createCategory.execute(user.tenantId, dto.name);
   }
 
   @Get()
   findAll(@CurrentUser() user: AuthUser) {
-    return this.categoriesService.findAll(user.tenantId);
+    return this.getAllCategories.execute(user.tenantId);
   }
 
   @Get(':id')
   findOne(@Param('id') id: string, @CurrentUser() user: AuthUser) {
-    return this.categoriesService.findOne(user.tenantId, id);
+    return this.getCategory.execute(user.tenantId, id);
   }
 
   @Put(':id')
@@ -49,11 +59,11 @@ export class CategoriesController {
     @Body() dto: UpdateCategoryDto,
     @CurrentUser() user: AuthUser,
   ) {
-    return this.categoriesService.update(user.tenantId, id, dto);
+    return this.updateCategory.execute(user.tenantId, id, dto.name);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string, @CurrentUser() user: AuthUser) {
-    return this.categoriesService.remove(user.tenantId, id);
+    return this.deleteCategory.execute(user.tenantId, id);
   }
 }
